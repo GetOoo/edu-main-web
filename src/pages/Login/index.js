@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 // import { useHistory } from "react-router-dom"
-import { Paper, Typography, TextField, Button, Box } from "@mui/material"
+import { Paper, Typography, TextField, Button, Box, Alert } from "@mui/material"
 import { saveAccount } from './api';
 
 const LoginPage = () => {
@@ -8,6 +8,20 @@ const LoginPage = () => {
   const [username, setUsername] = useState("")
   const [password, setPassword] = useState("")
   const [confirmPassword, setConfirmPassword] = useState("")
+
+  const [showAlert, setShowAlert] = useState(false)
+  const [alertSeverity, setAlertSeverity] = useState("info")
+  const [alertMsg, setAlertMsg] = useState("")
+
+
+  useEffect(() => {
+    if (showAlert) {
+      const timer = setTimeout(() => {
+        setShowAlert(false);
+      }, 5000);
+      return () => clearTimeout(timer);
+    }
+  }, [showAlert]);
   // const history = useHistory()
 
   const handleToggleSignUp = () => {
@@ -27,29 +41,43 @@ const LoginPage = () => {
   }
 
   const handleSubmit = async (event) => {
-    if(isSignUp) {
-      if(username && password &&  confirmPassword && password === confirmPassword) {
+    if (isSignUp) {
+      console.log(1);
+      if (username && password && confirmPassword && password === confirmPassword) {
         const params = {
-          name: username,
-          tel: password
+          username: username,
+          password: password
         }
         console.log(JSON.stringify(params));
         saveAccount(params).then(
-          response => response.json()
-        ).then(data => console.log(data))
-        .catch(error => console.error(error));
+          response => {
+            console.log(JSON.stringify(response))
+            setShowAlert(true);
+            setAlertSeverity("success");
+            setAlertMsg("Success")
+          }
+        ).catch(error => {
+          setShowAlert(true);
+          setAlertSeverity("error");
+          setAlertMsg(error);
+        });
+      } else {
+        console.log(2);
+        setShowAlert(true);
+        setAlertSeverity("warning");
+        setAlertMsg("Input Error");
       }
-
-    } else {
-
     }
     event.preventDefault()
-    // TODO: Add authentication logic here
-    // history.push("/home")
+  }
+
+  const checkUserExist = async () => {
+    
   }
 
   return (
     <Paper sx={{ p: 2 }}>
+      {showAlert && <Alert severity={alertSeverity}>{alertMsg}</Alert>}
       <Typography variant="h5" gutterBottom>
         {isSignUp ? "Sign up" : "Login"}
       </Typography>
