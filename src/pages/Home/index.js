@@ -1,6 +1,6 @@
 import React from 'react';
 import { Container, CssBaseline, Stack } from "@mui/material";
-import { PaperContainer } from "../components/PaperContainer";
+// import { PaperContainer } from "../components/PaperContainer";
 
 const HomePage = () => {
   return (
@@ -9,7 +9,7 @@ const HomePage = () => {
       <Stack>
         <CssBaseline />
         <Container maxWidth="xl">
-          <PaperContainer />
+          {/* <PaperContainer /> */}
         </Container>
       </Stack>
     </>

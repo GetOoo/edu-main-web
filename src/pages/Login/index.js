@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 // import { useHistory } from "react-router-dom"
 import { Paper, Typography, TextField, Button, Box } from "@mui/material"
+import { saveAccount } from './api';
 
 const LoginPage = () => {
   const [isSignUp, setIsSignUp] = useState(false)
@@ -25,7 +26,23 @@ const LoginPage = () => {
     setConfirmPassword(event.target.value)
   }
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
+    if(isSignUp) {
+      if(username && password &&  confirmPassword && password === confirmPassword) {
+        const params = {
+          name: username,
+          tel: password
+        }
+        console.log(JSON.stringify(params));
+        saveAccount(params).then(
+          response => response.json()
+        ).then(data => console.log(data))
+        .catch(error => console.error(error));
+      }
+
+    } else {
+
+    }
     event.preventDefault()
     // TODO: Add authentication logic here
     // history.push("/home")
